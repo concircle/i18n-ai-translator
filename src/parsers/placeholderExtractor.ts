@@ -2,20 +2,25 @@ import { PlaceholderInfo, PlaceholderToken } from '../types.js';
 
 const PLACEHOLDER_PATTERN =
   /\{\d+\}|\{[a-zA-Z_][\w.-]*\}|\$\{[a-zA-Z_][\w.-]*\}|%\d+\$[sdif]|%[sdif]/g;
+const PROTECTED_SEQUENCE_PATTERN = /\\[nrtf]/g;
+const MASKABLE_PATTERN = new RegExp(
+  `${PLACEHOLDER_PATTERN.source}|${PROTECTED_SEQUENCE_PATTERN.source}`,
+  'g'
+);
 
 export function extractPlaceholders(text: string): string[] {
-  return Array.from(text.matchAll(PLACEHOLDER_PATTERN), (match) => match[0]);
+  return Array.from(text.matchAll(MASKABLE_PATTERN), (match) => match[0]);
 }
 
 export function hasPlaceholders(text: string): boolean {
-  return new RegExp(PLACEHOLDER_PATTERN).test(text);
+  return new RegExp(MASKABLE_PATTERN).test(text);
 }
 
 export function maskPlaceholders(text: string): PlaceholderInfo {
   const tokens: PlaceholderToken[] = [];
   let index = 0;
 
-  const masked = text.replace(PLACEHOLDER_PATTERN, (placeholder) => {
+  const masked = text.replace(MASKABLE_PATTERN, (placeholder) => {
     const token = `__I18N_PH_${index}__`;
     index += 1;
     tokens.push({ token, placeholder });

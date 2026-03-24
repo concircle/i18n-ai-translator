@@ -44,6 +44,22 @@ describe('placeholderExtractor', () => {
 
   it('detects whether a text contains placeholders', () => {
     expect(hasPlaceholders('Found %d results')).toBe(true);
+    expect(hasPlaceholders('Line 1\\nLine 2')).toBe(true);
     expect(hasPlaceholders('Plain text')).toBe(false);
+  });
+
+  it('protects escaped control sequences like \\n', () => {
+    const masked = maskPlaceholders('Hello\\n{user}');
+
+    expect(masked.masked).toContain('__I18N_PH_0__');
+    expect(masked.masked).toContain('__I18N_PH_1__');
+
+    const restored = restorePlaceholders(
+      'Hallo__I18N_PH_0____I18N_PH_1__',
+      masked.tokens
+    );
+
+    expect(restored).toBe('Hallo\\n{user}');
+    expect(validatePlaceholderIntegrity('Hello\\n{user}', restored).valid).toBe(true);
   });
 });
