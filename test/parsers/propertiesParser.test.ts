@@ -60,6 +60,15 @@ describe('propertiesParser', () => {
     expect(written).toContain('app.title=Cloned App');
   });
 
+  it('encodes non-ascii characters when requested', () => {
+    const document = createDocumentFromEntries({ city: 'Zürich', greeting: 'Grüß Gott' });
+
+    const serialized = serializePropertiesDocument(document, { encodeUnicode: true });
+
+    expect(serialized).toContain('city=Z\\u00fcrich');
+    expect(serialized).toContain('greeting=Gr\\u00fc\\u00df Gott');
+  });
+
   it('lists entry values by key', () => {
     const document = readPropertiesDocument(path.join(fixturesDir, 'i18n.properties'));
     const entries = listPropertiesEntries(document);

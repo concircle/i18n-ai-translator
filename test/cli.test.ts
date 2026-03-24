@@ -27,6 +27,7 @@ describe('CLI', () => {
       '--model',
       'gpt-4.1',
       '--dry-run',
+      '--encode-unicode',
       '--verbose',
     ]);
 
@@ -39,6 +40,7 @@ describe('CLI', () => {
       provider: undefined,
       model: 'gpt-4.1',
       dryRun: true,
+      encodeUnicode: true,
       verbose: true,
       help: false,
     });

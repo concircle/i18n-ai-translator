@@ -64,6 +64,7 @@ export class Translator {
             input: options.inputPath,
             targetLanguages: options.languages,
             translationMode: options.mode,
+            encodeUnicode: options.encodeUnicode,
             provider: options.provider,
             model: options.model,
             verbose: options.verbose,
@@ -133,7 +134,9 @@ export class Translator {
 
       const errors: string[] = [];
       if (!options?.dryRun) {
-        writePropertiesDocument(targetPath, outputDocument);
+        writePropertiesDocument(targetPath, outputDocument, {
+          encodeUnicode: this.config.encodeUnicode,
+        });
       }
 
       result.translations[language] = {
@@ -265,6 +268,7 @@ export async function translateProject(
         input: options?.inputPath,
         targetLanguages: options?.languages,
         translationMode: options?.mode,
+        encodeUnicode: options?.encodeUnicode,
         provider: options?.provider,
         model: options?.model,
         verbose: options?.verbose,

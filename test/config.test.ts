@@ -36,12 +36,14 @@ describe('config loading', () => {
       overrides: {
         targetLanguages: ['es'],
         input: 'custom/i18n.properties',
+        encodeUnicode: true,
         model: 'gpt-4.1',
       },
     });
 
     expect(config.targetLanguages).toEqual(['es']);
     expect(config.files?.input).toBe('custom/i18n.properties');
+    expect(config.encodeUnicode).toBe(true);
     expect(config.providerOptions?.model).toBe('gpt-4.1');
   });
 });

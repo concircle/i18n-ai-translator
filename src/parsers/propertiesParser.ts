@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import { PropertiesDocument, PropertiesLine } from '../types.js';
+import {
+  PropertiesDocument,
+  PropertiesLine,
+  PropertiesSerializationOptions,
+} from '../types.js';
 
 export function parsePropertiesDocument(content: string): PropertiesDocument {
   const eolMatch = content.match(/\r\n|\n/);
@@ -81,8 +85,11 @@ export function upsertPropertiesValue(
   });
 }
 
-export function serializePropertiesDocument(document: PropertiesDocument): string {
-  const serializedLines = document.lines.map(serializeLine);
+export function serializePropertiesDocument(
+  document: PropertiesDocument,
+  options: PropertiesSerializationOptions = {}
+): string {
+  const serializedLines = document.lines.map((line) => serializeLine(line, options));
   const body = serializedLines.join(document.eol);
 
   if (body.length === 0) {
@@ -94,14 +101,15 @@ export function serializePropertiesDocument(document: PropertiesDocument): strin
 
 export function writePropertiesDocument(
   filePath: string,
-  document: PropertiesDocument
+  document: PropertiesDocument,
+  options: PropertiesSerializationOptions = {}
 ): void {
   const dir = path.dirname(filePath);
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
 
-  fs.writeFileSync(filePath, serializePropertiesDocument(document), 'utf-8');
+  fs.writeFileSync(filePath, serializePropertiesDocument(document, options), 'utf-8');
 }
 
 export function createDocumentFromEntries(
@@ -196,13 +204,17 @@ function parseLine(raw: string): PropertiesLine {
   };
 }
 
-function serializeLine(line: PropertiesLine): string {
+function serializeLine(
+  line: PropertiesLine,
+  options: PropertiesSerializationOptions
+): string {
   if (line.type !== 'entry') {
     return line.raw;
   }
 
   return `${line.leadingWhitespace}${escapePropertiesToken(line.key)}${line.separator}${escapePropertiesValue(
-    line.value
+    line.value,
+    options
   )}`;
 }
 
@@ -234,10 +246,21 @@ function escapePropertiesToken(value: string): string {
     .replace(/=/g, '\\=');
 }
 
-function escapePropertiesValue(value: string): string {
-  return value
+function escapePropertiesValue(
+  value: string,
+  options: PropertiesSerializationOptions
+): string {
+  const escaped = value
     .replace(/\\/g, '\\\\')
     .replace(/\n/g, '\\n')
     .replace(/\r/g, '\\r')
     .replace(/\t/g, '\\t');
+
+  if (!options.encodeUnicode) {
+    return escaped;
+  }
+
+  return escaped.replace(/[^\u0000-\u007F]/g, (char) =>
+    `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`
+  );
 }

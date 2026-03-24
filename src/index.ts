@@ -42,6 +42,7 @@ export type {
   PlaceholderToken,
   PropertiesDocument,
   PropertiesLine,
+  PropertiesSerializationOptions,
   SupportedProvider,
   TranslationBatchRequest,
   TranslationBatchResponse,

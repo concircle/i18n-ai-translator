@@ -50,6 +50,7 @@ export interface TranslatorConfig {
   sourceLanguage?: string;
   targetLanguages: string[];
   translationMode?: TranslationMode;
+  encodeUnicode?: boolean;
   provider?: SupportedProvider;
   providerOptions?: OpenAIProviderOptions;
   files?: FileConfig;
@@ -63,6 +64,7 @@ export interface TranslatorConfig {
 export interface TranslatorConfigOverrides {
   targetLanguages?: string[];
   translationMode?: TranslationMode;
+  encodeUnicode?: boolean;
   provider?: SupportedProvider;
   input?: string;
   verbose?: boolean;
@@ -111,9 +113,14 @@ export interface TranslationFileOptions {
 export interface TranslationProjectOptions extends TranslationFileOptions {
   configPath?: string;
   cwd?: string;
+  encodeUnicode?: boolean;
   provider?: SupportedProvider;
   model?: string;
   verbose?: boolean;
+}
+
+export interface PropertiesSerializationOptions {
+  encodeUnicode?: boolean;
 }
 
 export interface LanguageTranslationSummary {

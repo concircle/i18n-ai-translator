@@ -40,6 +40,24 @@ Then add a script in the consuming app:
 }
 ```
 
+If your target system expects Java-style Unicode escapes in `.properties` files, enable them with:
+
+```json
+{
+  "scripts": {
+    "i18n:translate": "ui5-ai-i18n translate --input ./webapp/i18n/i18n.properties --languages de,fr --mode missing --encode-unicode"
+  }
+}
+```
+
+Or set it in your config file:
+
+```json
+{
+  "encodeUnicode": true
+}
+```
+
 Run it with:
 
 ```bash

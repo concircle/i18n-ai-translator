@@ -35,6 +35,7 @@ export async function loadTranslatorConfig(options?: {
       sourceLanguage: 'en',
       targetLanguages: [],
       translationMode: 'missing',
+      encodeUnicode: false,
       provider: 'openai',
       batchSize: 20,
       verbose: false,
@@ -93,6 +94,7 @@ export function createDefaultConfig(
     sourceLanguage: 'en',
     targetLanguages,
     translationMode: 'missing',
+    encodeUnicode: false,
     provider: 'openai',
     providerOptions: {
       apiKey,
@@ -143,6 +145,7 @@ function applyOverrides(
     ...config,
     provider: overrides.provider ?? config.provider,
     translationMode: overrides.translationMode ?? config.translationMode,
+    encodeUnicode: overrides.encodeUnicode ?? config.encodeUnicode,
     targetLanguages: overrides.targetLanguages ?? config.targetLanguages,
     verbose: overrides.verbose ?? config.verbose,
     files: {

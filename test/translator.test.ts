@@ -110,4 +110,32 @@ describe('Translator', () => {
 
     await expect(translator.translateFile()).rejects.toThrow('Placeholder validation failed');
   });
+
+  it('writes unicode escapes when encodeUnicode is enabled', async () => {
+    createMock.mockResolvedValue({
+      output_text: JSON.stringify({
+        items: [
+          { key: 'app.title', translatedValue: 'Menüführung' },
+          { key: 'msg.save', translatedValue: 'Speichern __I18N_PH_0__ für München' },
+        ],
+      }),
+    });
+
+    const translator = new Translator({
+      sourceLanguage: 'en',
+      targetLanguages: ['de'],
+      translationMode: 'overwrite',
+      encodeUnicode: true,
+      provider: 'openai',
+      providerOptions: { apiKey: 'test-key' },
+      files: { input: sourceFile },
+      cache: { enabled: false },
+    });
+
+    await translator.translateFile();
+    const written = fs.readFileSync(targetFile, 'utf-8');
+
+    expect(written).toContain('app.title=Men\\u00fcf\\u00fchrung');
+    expect(written).toContain('msg.save=Speichern {0} f\\u00fcr M\\u00fcnchen');
+  });
 });

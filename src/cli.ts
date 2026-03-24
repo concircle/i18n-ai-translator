@@ -42,6 +42,7 @@ export async function runCli(
       provider: args.provider as 'openai' | undefined,
       model: args.model,
       dryRun: args.dryRun,
+      encodeUnicode: args.encodeUnicode,
       verbose: args.verbose,
     });
 
@@ -62,11 +63,13 @@ export function parseArgs(argv: string[]): {
   provider?: string;
   model?: string;
   dryRun: boolean;
+  encodeUnicode: boolean;
   verbose: boolean;
   help: boolean;
 } {
   const result = {
     dryRun: false,
+    encodeUnicode: false,
     verbose: false,
     help: false,
   } as {
@@ -78,6 +81,7 @@ export function parseArgs(argv: string[]): {
     provider?: string;
     model?: string;
     dryRun: boolean;
+    encodeUnicode: boolean;
     verbose: boolean;
     help: boolean;
   };
@@ -110,6 +114,9 @@ export function parseArgs(argv: string[]): {
       case '--dry-run':
         result.dryRun = true;
         break;
+      case '--encode-unicode':
+        result.encodeUnicode = true;
+        break;
       case '--verbose':
         result.verbose = true;
         break;
@@ -137,6 +144,7 @@ function getHelpText(): string {
     '  --provider <name>    Reserved for future providers',
     '  --model <name>       Override provider model',
     '  --dry-run            Do not write files',
+    '  --encode-unicode     Write non-ASCII characters as \\uXXXX escapes',
     '  --verbose            Enable verbose logs',
     '  --help               Show this help text',
   ].join('\n');
