@@ -68,6 +68,7 @@ export function upsertPropertiesValue(
 
   if (existing) {
     existing.value = value;
+    existing.modified = true;
     return;
   }
 
@@ -82,6 +83,7 @@ export function upsertPropertiesValue(
     value,
     separator: '=',
     leadingWhitespace: '',
+    modified: true,
   });
 }
 
@@ -122,6 +124,7 @@ export function createDocumentFromEntries(
     value,
     separator: '=',
     leadingWhitespace: '',
+    modified: true,
   }));
 
   return {
@@ -201,6 +204,7 @@ function parseLine(raw: string): PropertiesLine {
     value: decodePropertiesToken(rawValue),
     separator,
     leadingWhitespace,
+    modified: false,
   };
 }
 
@@ -209,6 +213,10 @@ function serializeLine(
   options: PropertiesSerializationOptions
 ): string {
   if (line.type !== 'entry') {
+    return line.raw;
+  }
+
+  if (!line.modified && line.raw) {
     return line.raw;
   }
 

@@ -41,6 +41,15 @@ describe('propertiesParser', () => {
     expect(serialized).toContain('# Existing German translations');
   });
 
+  it('preserves raw encoding for untouched existing entries', () => {
+    const input = 'title = Best\\u00E4tigt\\nquote = l\\u0027utilisateur\\n';
+    const document = parsePropertiesDocument(input);
+
+    const serialized = serializePropertiesDocument(document, { encodeUnicode: true });
+
+    expect(serialized).toBe(input);
+  });
+
   it('adds new keys at the end of the document', () => {
     const document = createDocumentFromEntries({ 'app.title': 'My App' });
     upsertPropertiesValue(document, 'nav.home', 'Home');

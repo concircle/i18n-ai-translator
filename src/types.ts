@@ -155,6 +155,7 @@ export type PropertiesLine =
       value: string;
       separator: string;
       leadingWhitespace: string;
+      modified: boolean;
     };
 
 export interface PropertiesDocument {

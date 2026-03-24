@@ -34,7 +34,11 @@ describe('Translator', () => {
   });
 
   it('translates only missing keys in missing mode', async () => {
-    fs.writeFileSync(targetFile, 'app.title=Bestehender Titel\n', 'utf-8');
+    fs.writeFileSync(
+      targetFile,
+      'app.title=Best\\u00E4tigter Titel\nquote=l\\u0027utilisateur\n',
+      'utf-8'
+    );
     createMock.mockResolvedValue({
       output_text: JSON.stringify({
         items: [{ key: 'msg.save', translatedValue: 'Speichern __I18N_PH_0__ Eintrage' }],
@@ -56,7 +60,8 @@ describe('Translator', () => {
 
     expect(result.translations.de.translatedKeysCount).toBe(1);
     expect(result.translations.de.skippedKeysCount).toBe(1);
-    expect(written).toContain('app.title=Bestehender Titel');
+    expect(written).toContain('app.title=Best\\u00E4tigter Titel');
+    expect(written).toContain("quote=l\\u0027utilisateur");
     expect(written).toContain('msg.save=Speichern {0} Eintrage');
   });
 
