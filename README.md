@@ -386,7 +386,7 @@ Tests include:
 
 ## License
 
-MIT © 2026 Herbert - Concircle
+MIT © 2026 Herbert Kaintz - Concircle
 
 ## Contributing
 
