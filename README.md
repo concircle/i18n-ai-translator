@@ -20,6 +20,32 @@ AI-powered internationalization (i18n) translator for UI5 applications. Automati
 npm install @concircle/i18n-ai-translator
 ```
 
+### Install From Git In Another App
+
+If you want to use the CLI from another application's `npm run` scripts without publishing to npm yet, install this package directly from your Git remote:
+
+```bash
+npm install -D git+ssh://git@github.com/DEIN-ORG/DEIN-REPO.git#main
+```
+
+This package runs `prepare` on Git-based installs, so the CLI is built automatically during installation.
+
+Then add a script in the consuming app:
+
+```json
+{
+  "scripts": {
+    "i18n:translate": "ui5-ai-i18n translate --input ./webapp/i18n/i18n.properties --languages de,fr --mode missing"
+  }
+}
+```
+
+Run it with:
+
+```bash
+npm run i18n:translate
+```
+
 ## Quick Start
 
 ### Basic Usage (ES Modules)
