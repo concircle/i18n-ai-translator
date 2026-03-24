@@ -1,0 +1,22 @@
+{
+  "provider": "openai",
+  "openai": {
+    "apiKey": "sk-...",
+    "model": "gpt-4",
+    "temperature": 0.3,
+    "maxTokens": 2000
+  },
+  "targetLanguages": [
+    "de",
+    "fr",
+    "es"
+  ],
+  "glossary": "./examples/glossary.json",
+  "cache": {
+    "enabled": true,
+    "ttl": 604800000,
+    "dir": null
+  },
+  "batchSize": 10,
+  "debug": false
+}

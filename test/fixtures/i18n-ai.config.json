@@ -1,0 +1,31 @@
+{
+  "sourceLanguage": "en",
+  "targetLanguages": ["de", "fr"],
+  "translationMode": "missing",
+  "provider": "openai",
+  "providerOptions": {
+    "apiKey": "config-key",
+    "model": "gpt-4.1-mini"
+  },
+  "files": {
+    "input": "test/fixtures/i18n.properties"
+  },
+  "glossary": {
+    "shared": [
+      {
+        "source": "Order",
+        "target": "Auftrag",
+        "context": "SAP sales document"
+      }
+    ],
+    "languages": {
+      "de": [
+        {
+          "source": "Plant",
+          "target": "Werk"
+        }
+      ]
+    }
+  },
+  "rules": ["Use SAP terminology"]
+}

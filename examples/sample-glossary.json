@@ -1,0 +1,46 @@
+{
+  "SAP": {
+    "term": "SAP",
+    "translation": "SAP",
+    "doNotTranslate": true,
+    "context": "SAP Enterprise Resource Planning System"
+  },
+  "HANA": {
+    "term": "HANA",
+    "translation": "SAP HANA",
+    "doNotTranslate": true,
+    "context": "In-memory database platform"
+  },
+  "Fiori": {
+    "term": "Fiori",
+    "translation": "SAP Fiori",
+    "doNotTranslate": true,
+    "context": "User experience design philosophy"
+  },
+  "UI5": {
+    "term": "UI5",
+    "translation": "SAPUI5",
+    "context": "Web framework for building responsive applications"
+  },
+  "OData": {
+    "term": "OData",
+    "translation": "OData",
+    "doNotTranslate": true,
+    "context": "Open Data Protocol"
+  },
+  "module": {
+    "term": "module",
+    "translation": "Modul",
+    "context": "German translation for module/component"
+  },
+  "list": {
+    "term": "list",
+    "translation": "Liste",
+    "context": "German translation for list"
+  },
+  "dashboard": {
+    "term": "dashboard",
+    "translation": "Instrumententafel",
+    "context": "German translation for dashboard"
+  }
+}
