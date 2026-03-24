@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { pathToFileURL } from 'url';
+import dotenv from 'dotenv';
 import { GlossaryManager } from '../glossary/glossaryManager.js';
 import {
   TranslationMode,
@@ -23,6 +24,7 @@ export async function loadTranslatorConfig(options?: {
   overrides?: TranslatorConfigOverrides;
 }): Promise<TranslatorConfig> {
   const cwd = options?.cwd ?? process.cwd();
+  loadEnvFiles(cwd);
   const configPath = options?.configPath
     ? path.resolve(cwd, options.configPath)
     : findDefaultConfigPath(cwd);
@@ -187,4 +189,17 @@ export function resolveTranslationMode(
   fallback: TranslationMode = 'missing'
 ): TranslationMode {
   return preferred ?? fallback;
+}
+
+function loadEnvFiles(cwd: string): void {
+  const envPath = path.join(cwd, '.env');
+  const envLocalPath = path.join(cwd, '.env.local');
+
+  if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+  }
+
+  if (fs.existsSync(envLocalPath)) {
+    dotenv.config({ path: envLocalPath, override: true });
+  }
 }
