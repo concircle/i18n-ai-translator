@@ -45,4 +45,14 @@ describe('CLI', () => {
       help: false,
     });
   });
+
+  it('leaves encodeUnicode undefined when the flag is not provided', () => {
+    const parsed = parseArgs([
+      'translate',
+      '--config',
+      'i18n-ai.config.json',
+    ]);
+
+    expect(parsed.encodeUnicode).toBeUndefined();
+  });
 });

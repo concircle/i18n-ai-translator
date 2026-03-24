@@ -63,13 +63,12 @@ export function parseArgs(argv: string[]): {
   provider?: string;
   model?: string;
   dryRun: boolean;
-  encodeUnicode: boolean;
+  encodeUnicode?: boolean;
   verbose: boolean;
   help: boolean;
 } {
   const result = {
     dryRun: false,
-    encodeUnicode: false,
     verbose: false,
     help: false,
   } as {
@@ -81,7 +80,7 @@ export function parseArgs(argv: string[]): {
     provider?: string;
     model?: string;
     dryRun: boolean;
-    encodeUnicode: boolean;
+    encodeUnicode?: boolean;
     verbose: boolean;
     help: boolean;
   };
