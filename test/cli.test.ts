@@ -15,7 +15,6 @@ describe('CLI', () => {
 
   it('parses translate arguments', () => {
     const parsed = parseArgs([
-      'translate',
       '--config',
       'i18n-ai.config.json',
       '--input',
@@ -32,7 +31,6 @@ describe('CLI', () => {
     ]);
 
     expect(parsed).toEqual({
-      command: 'translate',
       config: 'i18n-ai.config.json',
       input: 'webapp/i18n/i18n.properties',
       languages: ['de', 'fr'],
@@ -48,7 +46,6 @@ describe('CLI', () => {
 
   it('leaves encodeUnicode undefined when the flag is not provided', () => {
     const parsed = parseArgs([
-      'translate',
       '--config',
       'i18n-ai.config.json',
     ]);
@@ -60,7 +57,7 @@ describe('CLI', () => {
     const log = vi.fn();
     const error = vi.fn();
 
-    const exitCode = await runCli(['translate', '--mode', 'override'], { log, error });
+    const exitCode = await runCli(['--mode', 'override'], { log, error });
 
     expect(exitCode).toBe(1);
     expect(error).toHaveBeenCalledWith(
@@ -73,7 +70,7 @@ describe('CLI', () => {
     const log = vi.fn();
     const error = vi.fn();
 
-    const exitCode = await runCli(['translate', '--mod', 'overwrite'], { log, error });
+    const exitCode = await runCli(['--mod', 'overwrite'], { log, error });
 
     expect(exitCode).toBe(1);
     expect(error).toHaveBeenCalledWith(
@@ -86,10 +83,21 @@ describe('CLI', () => {
     const log = vi.fn();
     const error = vi.fn();
 
-    const exitCode = await runCli(['translate', '--mode'], { log, error });
+    const exitCode = await runCli(['--mode'], { log, error });
 
     expect(exitCode).toBe(1);
     expect(error).toHaveBeenCalledWith('Missing value for option "--mode".');
     expect(log).toHaveBeenCalled();
+  });
+
+  it('prints help for explicit help command', async () => {
+    const log = vi.fn();
+    const error = vi.fn();
+
+    const exitCode = await runCli(['help'], { log, error });
+
+    expect(exitCode).toBe(0);
+    expect(log).toHaveBeenCalled();
+    expect(error).not.toHaveBeenCalled();
   });
 });

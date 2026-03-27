@@ -4,7 +4,7 @@
   "description": "AI-powered i18n translator for UI5 apps. Translates i18n.properties files using OpenAI (extensible for other AI providers).",
   "type": "module",
   "bin": {
-    "ui5-ai-i18n": "./bin/ui5-ai-i18n.mjs"
+    "ai-i18n-translate": "./bin/ai-i18n-translate.mjs"
   },
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",

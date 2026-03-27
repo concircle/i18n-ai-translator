@@ -15,7 +15,7 @@ export async function runCli(
     log: console.log,
     error: console.error,
   }
-): Promise<number> {
+  ): Promise<number> {
   let args;
   try {
     args = parseArgs(argv);
@@ -25,15 +25,9 @@ export async function runCli(
     return 1;
   }
 
-  if (args.help || args.command === 'help' || !args.command) {
+  if (args.help || argv.length === 0) {
     io.log(getHelpText());
     return 0;
-  }
-
-  if (args.command !== 'translate') {
-    io.error(`Unknown command: ${args.command}`);
-    io.log(getHelpText());
-    return 1;
   }
 
   try {
@@ -58,7 +52,6 @@ export async function runCli(
 }
 
 export function parseArgs(argv: string[]): {
-  command?: string;
   config?: string;
   input?: string;
   languages?: string[];
@@ -75,7 +68,6 @@ export function parseArgs(argv: string[]): {
     verbose: false,
     help: false,
   } as {
-    command?: string;
     config?: string;
     input?: string;
     languages?: string[];
@@ -89,7 +81,10 @@ export function parseArgs(argv: string[]): {
   };
 
   const tokens = [...argv];
-  result.command = tokens.shift();
+  if (tokens[0] === 'help') {
+    tokens.shift();
+    result.help = true;
+  }
 
   while (tokens.length > 0) {
     const token = tokens.shift()!;
@@ -165,7 +160,7 @@ function readOptionValue(tokens: string[], option: string): string {
 
 function getHelpText(): string {
   return [
-    'ui5-ai-i18n translate [options]',
+    'ai-i18n-translate [options]',
     '',
     'Options:',
     '  --config <path>      Path to i18n-ai config file',

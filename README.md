@@ -35,7 +35,7 @@ Then add a script in the consuming app:
 ```json
 {
   "scripts": {
-    "i18n:translate": "ui5-ai-i18n translate --input ./webapp/i18n/i18n.properties --languages de,fr --mode missing"
+    "i18n:translate": "ai-i18n-translate --input ./webapp/i18n/i18n.properties --languages de,fr --mode missing"
   }
 }
 ```
@@ -45,7 +45,7 @@ If your target system expects Java-style Unicode escapes in `.properties` files,
 ```json
 {
   "scripts": {
-    "i18n:translate": "ui5-ai-i18n translate --input ./webapp/i18n/i18n.properties --languages de,fr --mode missing --encode-unicode"
+    "i18n:translate": "ai-i18n-translate --input ./webapp/i18n/i18n.properties --languages de,fr --mode missing --encode-unicode"
   }
 }
 ```
