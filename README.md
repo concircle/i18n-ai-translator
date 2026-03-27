@@ -3,7 +3,7 @@
 <table>
   <tr>
     <td width="200" valign="top">
-      <img src="./assets/logo.png" alt="Concircle logo" width="100" />
+      <img src="./assets/logo.png" alt="Concircle logo" />
     </td>
     <td valign="top">
       AI-powered internationalization (i18n) translator for UI5 applications. Automatically translates <code>i18n.properties</code> files to multiple languages using OpenAI, with support for glossaries, placeholder preservation, and intelligent caching.
