@@ -23,7 +23,7 @@
 ## Installation
 
 ```bash
-npm install @concircle/i18n-ai-translator
+npm install --save-dev @concircle/i18n-ai-translator
 ```
 
 ## CLI
