@@ -4,6 +4,7 @@ import { pathToFileURL } from 'url';
 import dotenv from 'dotenv';
 import { GlossaryManager } from '../glossary/glossaryManager.js';
 import {
+  LanguageConfig,
   TranslationMode,
   TranslatorConfig,
   TranslatorConfigOverrides,
@@ -18,6 +19,35 @@ const DEFAULT_CONFIG_FILES = [
   'ui5-ai-i18n.config.js',
 ];
 
+const TOP_LEVEL_CONFIG_KEYS = [
+  'sourceLanguage',
+  'targetLanguages',
+  'translationMode',
+  'encodeUnicode',
+  'languageOptions',
+  'provider',
+  'providerOptions',
+  'files',
+  'glossary',
+  'cache',
+  'rules',
+  'batchSize',
+  'verbose',
+] as const;
+
+const PROVIDER_OPTIONS_KEYS = [
+  'apiKey',
+  'model',
+  'baseURL',
+  'organization',
+  'temperature',
+  'maxOutputTokens',
+] as const;
+
+const FILE_CONFIG_KEYS = ['input', 'outputDir', 'languageFilePattern'] as const;
+const CACHE_CONFIG_KEYS = ['enabled', 'ttlMs', 'dir'] as const;
+const LANGUAGE_CONFIG_KEYS = ['encodeUnicode'] as const;
+
 export async function loadTranslatorConfig(options?: {
   configPath?: string;
   cwd?: string;
@@ -30,6 +60,7 @@ export async function loadTranslatorConfig(options?: {
     : findDefaultConfigPath(cwd);
 
   const loaded = configPath ? await loadConfigFile(configPath) : {};
+  validateLoadedConfigShape(loaded, configPath);
   const merged = applyOverrides(
     applyEnvDefaults({
       sourceLanguage: 'en',
@@ -186,6 +217,68 @@ async function loadConfigFile(configPath: string): Promise<Partial<TranslatorCon
   }
 
   throw new Error(`Unsupported config format: ${configPath}`);
+}
+
+function validateLoadedConfigShape(
+  config: Partial<TranslatorConfig>,
+  configPath: string
+): void {
+  assertPlainObject(config, 'Config file', configPath);
+  validateAllowedKeys(config, TOP_LEVEL_CONFIG_KEYS, 'Config file', configPath);
+
+  if (config.providerOptions !== undefined) {
+    assertPlainObject(config.providerOptions, 'config.providerOptions', configPath);
+    validateAllowedKeys(
+      config.providerOptions,
+      PROVIDER_OPTIONS_KEYS,
+      'config.providerOptions',
+      configPath
+    );
+  }
+
+  if (config.files !== undefined) {
+    assertPlainObject(config.files, 'config.files', configPath);
+    validateAllowedKeys(config.files, FILE_CONFIG_KEYS, 'config.files', configPath);
+  }
+
+  if (config.cache !== undefined) {
+    assertPlainObject(config.cache, 'config.cache', configPath);
+    validateAllowedKeys(config.cache, CACHE_CONFIG_KEYS, 'config.cache', configPath);
+  }
+
+  if (config.languageOptions !== undefined) {
+    assertPlainObject(config.languageOptions, 'config.languageOptions', configPath);
+    for (const [language, value] of Object.entries(config.languageOptions)) {
+      assertPlainObject(value, `config.languageOptions.${language}`, configPath);
+      validateAllowedKeys(
+        value as LanguageConfig,
+        LANGUAGE_CONFIG_KEYS,
+        `config.languageOptions.${language}`,
+        configPath
+      );
+    }
+  }
+}
+
+function validateAllowedKeys(
+  value: Record<string, unknown>,
+  allowedKeys: readonly string[],
+  pathLabel: string,
+  configPath: string
+): void {
+  for (const key of Object.keys(value)) {
+    if (!allowedKeys.includes(key)) {
+      throw new Error(
+        `Unknown option "${key}" in ${pathLabel} of ${configPath}.`
+      );
+    }
+  }
+}
+
+function assertPlainObject(value: unknown, pathLabel: string, configPath: string): void {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    throw new Error(`${pathLabel} in ${configPath} must be an object.`);
+  }
 }
 
 export function resolveTranslationMode(

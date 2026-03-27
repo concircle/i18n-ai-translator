@@ -1,6 +1,13 @@
+import fs from 'fs';
 import path from 'path';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { loadTranslatorConfig } from '../src/utils/config';
+
+const runtimeDir = path.join(process.cwd(), 'test', 'fixtures', 'runtime-config');
+
+afterEach(() => {
+  fs.rmSync(runtimeDir, { recursive: true, force: true });
+});
 
 describe('config loading', () => {
   it('loads config files and glossary definitions', async () => {
@@ -57,5 +64,57 @@ describe('config loading', () => {
       de: { encodeUnicode: true },
       uk: { encodeUnicode: false },
     });
+  });
+
+  it('rejects unknown top-level options in config files', async () => {
+    fs.mkdirSync(runtimeDir, { recursive: true });
+    const configPath = path.join(runtimeDir, 'invalid.config.json');
+    fs.writeFileSync(
+      configPath,
+      JSON.stringify({
+        targetLanguages: ['de'],
+        provider: 'openai',
+        providerOptions: { apiKey: 'config-key' },
+        files: { input: 'test/fixtures/i18n.properties' },
+        asd: 'mission',
+      }),
+      'utf-8'
+    );
+
+    await expect(
+      loadTranslatorConfig({
+        configPath,
+        cwd: process.cwd(),
+      })
+    ).rejects.toThrow(`Unknown option "asd" in Config file of ${configPath}.`);
+  });
+
+  it('rejects unknown nested options in language-specific config', async () => {
+    fs.mkdirSync(runtimeDir, { recursive: true });
+    const configPath = path.join(runtimeDir, 'invalid-language.config.json');
+    fs.writeFileSync(
+      configPath,
+      JSON.stringify({
+        targetLanguages: ['uk'],
+        provider: 'openai',
+        providerOptions: { apiKey: 'config-key' },
+        files: { input: 'test/fixtures/i18n.properties' },
+        languageOptions: {
+          uk: {
+            encoding: false,
+          },
+        },
+      }),
+      'utf-8'
+    );
+
+    await expect(
+      loadTranslatorConfig({
+        configPath,
+        cwd: process.cwd(),
+      })
+    ).rejects.toThrow(
+      `Unknown option "encoding" in config.languageOptions.uk of ${configPath}.`
+    );
   });
 });

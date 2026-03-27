@@ -1,22 +1,27 @@
 {
+  "sourceLanguage": "en",
+  "translationMode": "missing",
   "provider": "openai",
-  "openai": {
+  "providerOptions": {
     "apiKey": "sk-...",
-    "model": "gpt-4",
-    "temperature": 0.3,
-    "maxTokens": 2000
+    "model": "gpt-4.1-mini",
+    "temperature": 0,
+    "maxOutputTokens": 2000
   },
   "targetLanguages": [
     "de",
     "fr",
     "es"
   ],
-  "glossary": "./examples/glossary.json",
+  "encodeUnicode": false,
+  "files": {
+    "input": "./i18n/i18n.properties"
+  },
+  "glossary": "./examples/sample-glossary.json",
   "cache": {
     "enabled": true,
-    "ttl": 604800000,
-    "dir": null
+    "ttlMs": 604800000
   },
   "batchSize": 10,
-  "debug": false
+  "verbose": false
 }
