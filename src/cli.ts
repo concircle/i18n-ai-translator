@@ -160,7 +160,7 @@ function readOptionValue(tokens: string[], option: string): string {
 
 function getHelpText(): string {
   return [
-    'ai-i18n-translate [options]',
+    'i18n-ai-translator [options]',
     '',
     'Options:',
     '  --config <path>      Path to i18n-ai config file',
