@@ -170,6 +170,7 @@ function parseLine(raw: string): PropertiesLine {
 
   let separatorIndex = -1;
   let separator = '=';
+  let valueStartIndex = -1;
 
   for (let index = 0; index < body.length; index += 1) {
     const char = body[index];
@@ -187,6 +188,19 @@ function parseLine(raw: string): PropertiesLine {
     if (char === ' ' || char === '\t' || char === '\f') {
       separatorIndex = index;
       separator = char;
+
+      let lookahead = index;
+      while (
+        lookahead < body.length &&
+        (body[lookahead] === ' ' || body[lookahead] === '\t' || body[lookahead] === '\f')
+      ) {
+        lookahead += 1;
+      }
+
+      if (lookahead < body.length && (body[lookahead] === '=' || body[lookahead] === ':')) {
+        separator = body[lookahead];
+        valueStartIndex = lookahead + 1;
+      }
       break;
     }
   }
@@ -194,7 +208,9 @@ function parseLine(raw: string): PropertiesLine {
   const rawKey = separatorIndex >= 0 ? body.slice(0, separatorIndex) : body;
   const rawValue =
     separatorIndex >= 0
-      ? body.slice(separatorIndex + 1).replace(/^[ \t\f]*/, '')
+      ? body
+          .slice(valueStartIndex >= 0 ? valueStartIndex : separatorIndex + 1)
+          .replace(/^[ \t\f]*/, '')
       : '';
 
   return {

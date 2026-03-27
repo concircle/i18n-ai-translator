@@ -50,6 +50,15 @@ describe('propertiesParser', () => {
     expect(serialized).toBe(input);
   });
 
+  it('parses whitespace before equals without keeping equals in the value', () => {
+    const input = 'ai.rerun_prompt = Rerun prompt\n';
+    const document = parsePropertiesDocument(input);
+    const entries = listPropertiesEntries(document);
+
+    expect(entries['ai.rerun_prompt']).toBe('Rerun prompt');
+    expect(serializePropertiesDocument(document)).toBe(input);
+  });
+
   it('adds new keys at the end of the document', () => {
     const document = createDocumentFromEntries({ 'app.title': 'My App' });
     upsertPropertiesValue(document, 'nav.home', 'Home');
