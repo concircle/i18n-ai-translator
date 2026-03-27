@@ -64,10 +64,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/concircle/i18n-ai-translator.git"
+    "url": "https://bitbucket.org/concircle/i18n-ai-translator.git"
   },
   "bugs": {
-    "url": "https://github.com/concircle/i18n-ai-translator/issues"
+    "url": "https://bitbucket.org/concircle/i18n-ai-translator/issues"
   },
   "engines": {
     "node": ">=20.0.0"
