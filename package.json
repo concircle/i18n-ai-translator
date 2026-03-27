@@ -69,6 +69,7 @@
   "bugs": {
     "url": "https://bitbucket.org/concircle/i18n-ai-translator/issues"
   },
+  "homepage": "https://bitbucket.org/concircle/i18n-ai-translator",
   "engines": {
     "node": ">=20.0.0"
   }
