@@ -60,7 +60,9 @@ export async function loadTranslatorConfig(options?: {
     : findDefaultConfigPath(cwd);
 
   const loaded = configPath ? await loadConfigFile(configPath) : {};
-  validateLoadedConfigShape(loaded, configPath);
+  if (configPath) {
+    validateLoadedConfigShape(loaded, configPath);
+  }
   const merged = applyOverrides(
     applyEnvDefaults({
       sourceLanguage: 'en',
@@ -261,7 +263,7 @@ function validateLoadedConfigShape(
 }
 
 function validateAllowedKeys(
-  value: Record<string, unknown>,
+  value: object,
   allowedKeys: readonly string[],
   pathLabel: string,
   configPath: string
