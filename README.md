@@ -1,6 +1,15 @@
 # @concircle/i18n-ai-translator
 
-AI-powered internationalization (i18n) translator for UI5 applications. Automatically translates `i18n.properties` files to multiple languages using OpenAI, with support for glossaries, placeholder preservation, and intelligent caching.
+<table>
+  <tr>
+    <td width="200" valign="top">
+      <img src="./assets/logo.png" alt="Concircle logo" width="100" />
+    </td>
+    <td valign="top">
+      AI-powered internationalization (i18n) translator for UI5 applications. Automatically translates <code>i18n.properties</code> files to multiple languages using OpenAI, with support for glossaries, placeholder preservation, and intelligent caching.
+    </td>
+  </tr>
+</table>
 
 ## Features
 
