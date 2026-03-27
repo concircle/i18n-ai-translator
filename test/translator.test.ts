@@ -16,6 +16,7 @@ vi.mock('openai', () => ({
 const fixtureDir = path.join(process.cwd(), 'test', 'fixtures', 'runtime');
 const sourceFile = path.join(fixtureDir, 'i18n.properties');
 const targetFile = path.join(fixtureDir, 'i18n_de.properties');
+const ukrainianTargetFile = path.join(fixtureDir, 'i18n_uk.properties');
 
 describe('Translator', () => {
   beforeEach(() => {
@@ -142,5 +143,39 @@ describe('Translator', () => {
 
     expect(written).toContain('app.title=Men\\u00fcf\\u00fchrung');
     expect(written).toContain('msg.save=Speichern {0} f\\u00fcr M\\u00fcnchen');
+  });
+
+  it('supports per-language unicode encoding overrides', async () => {
+    createMock.mockResolvedValue({
+      output_text: JSON.stringify({
+        items: [
+          { key: 'app.title', translatedValue: 'Menüführung' },
+          { key: 'msg.save', translatedValue: 'ШІ __I18N_PH_0__ планувальник' },
+        ],
+      }),
+    });
+
+    const translator = new Translator({
+      sourceLanguage: 'en',
+      targetLanguages: ['de', 'uk'],
+      translationMode: 'overwrite',
+      encodeUnicode: false,
+      languageOptions: {
+        de: { encodeUnicode: true },
+        uk: { encodeUnicode: false },
+      },
+      provider: 'openai',
+      providerOptions: { apiKey: 'test-key' },
+      files: { input: sourceFile },
+      cache: { enabled: false },
+    });
+
+    await translator.translateFile();
+    const germanWritten = fs.readFileSync(targetFile, 'utf-8');
+    const ukrainianWritten = fs.readFileSync(ukrainianTargetFile, 'utf-8');
+
+    expect(germanWritten).toContain('app.title=Men\\u00fcf\\u00fchrung');
+    expect(ukrainianWritten).toContain('msg.save=ШІ {0} планувальник');
+    expect(ukrainianWritten).not.toContain('\\u0428\\u0406');
   });
 });

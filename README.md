@@ -58,6 +58,24 @@ Or set it in your config file:
 }
 ```
 
+If you only want escapes for specific target languages, use per-language overrides:
+
+```json
+{
+  "encodeUnicode": false,
+  "languageOptions": {
+    "de": { "encodeUnicode": true },
+    "uk": { "encodeUnicode": false }
+  }
+}
+```
+
+This keeps languages like Ukrainian readable in UTF-8:
+
+```properties
+ai.button_tooltip = ШІ планувальник
+```
+
 Run it with:
 
 ```bash
@@ -127,6 +145,10 @@ interface TranslatorConfig {
     maxTokens?: number;     // Default: 2000
   };
   targetLanguages: string[]; // Required: e.g., ['de', 'fr', 'es']
+  encodeUnicode?: boolean; // Default: false, escape non-ASCII as \uXXXX
+  languageOptions?: Record<string, {
+    encodeUnicode?: boolean; // Per-language override
+  }>;
   glossary?: Glossary;       // Optional: Domain-specific vocabulary
   cache?: {
     enabled?: boolean;      // Default: true
@@ -150,6 +172,11 @@ interface TranslatorConfig {
     "maxTokens": 2000
   },
   "targetLanguages": ["de", "fr", "es"],
+  "encodeUnicode": false,
+  "languageOptions": {
+    "de": { "encodeUnicode": true },
+    "uk": { "encodeUnicode": false }
+  },
   "glossary": "./glossary.json",
   "cache": {
     "enabled": true,

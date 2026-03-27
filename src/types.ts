@@ -46,11 +46,16 @@ export interface FileConfig {
   languageFilePattern?: string;
 }
 
+export interface LanguageConfig {
+  encodeUnicode?: boolean;
+}
+
 export interface TranslatorConfig {
   sourceLanguage?: string;
   targetLanguages: string[];
   translationMode?: TranslationMode;
   encodeUnicode?: boolean;
+  languageOptions?: Record<string, LanguageConfig>;
   provider?: SupportedProvider;
   providerOptions?: OpenAIProviderOptions;
   files?: FileConfig;

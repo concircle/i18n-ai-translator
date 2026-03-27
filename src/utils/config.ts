@@ -146,6 +146,7 @@ function applyOverrides(
     provider: overrides.provider ?? config.provider,
     translationMode: overrides.translationMode ?? config.translationMode,
     encodeUnicode: overrides.encodeUnicode ?? config.encodeUnicode,
+    languageOptions: config.languageOptions,
     targetLanguages: overrides.targetLanguages ?? config.targetLanguages,
     verbose: overrides.verbose ?? config.verbose,
     files: {

@@ -135,7 +135,7 @@ export class Translator {
       const errors: string[] = [];
       if (!options?.dryRun) {
         writePropertiesDocument(targetPath, outputDocument, {
-          encodeUnicode: this.config.encodeUnicode,
+          encodeUnicode: this.resolveEncodeUnicode(language),
         });
       }
 
@@ -255,6 +255,11 @@ export class Translator {
     }
 
     return translatedMap;
+  }
+
+  private resolveEncodeUnicode(language: string): boolean {
+    const languageOverride = this.config.languageOptions?.[language]?.encodeUnicode;
+    return languageOverride ?? this.config.encodeUnicode ?? false;
   }
 }
 

@@ -10,6 +10,14 @@
   "files": {
     "input": "test/fixtures/i18n.properties"
   },
+  "languageOptions": {
+    "de": {
+      "encodeUnicode": true
+    },
+    "uk": {
+      "encodeUnicode": false
+    }
+  },
   "glossary": {
     "shared": [
       {

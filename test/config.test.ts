@@ -46,4 +46,16 @@ describe('config loading', () => {
     expect(config.encodeUnicode).toBe(true);
     expect(config.providerOptions?.model).toBe('gpt-4.1');
   });
+
+  it('keeps per-language options from config files', async () => {
+    const config = await loadTranslatorConfig({
+      configPath: path.join('test', 'fixtures', 'i18n-ai.config.json'),
+      cwd: process.cwd(),
+    });
+
+    expect(config.languageOptions).toEqual({
+      de: { encodeUnicode: true },
+      uk: { encodeUnicode: false },
+    });
+  });
 });
