@@ -6,6 +6,9 @@ interface CliIO {
   error(message: string): void;
 }
 
+const SUPPORTED_MODES: TranslationMode[] = ['missing', 'overwrite'];
+const SUPPORTED_PROVIDERS = ['openai'] as const;
+
 export async function runCli(
   argv: string[],
   io: CliIO = {
@@ -93,22 +96,39 @@ export function parseArgs(argv: string[]): {
 
     switch (token) {
       case '--config':
-        result.config = tokens.shift();
+        result.config = readOptionValue(tokens, '--config');
         break;
       case '--input':
-        result.input = tokens.shift();
+        result.input = readOptionValue(tokens, '--input');
         break;
       case '--languages':
-        result.languages = tokens.shift()?.split(',').map((value) => value.trim()).filter(Boolean);
+        result.languages = readOptionValue(tokens, '--languages')
+          .split(',')
+          .map((value) => value.trim())
+          .filter(Boolean);
         break;
-      case '--mode':
-        result.mode = tokens.shift() as TranslationMode;
+      case '--mode': {
+        const value = readOptionValue(tokens, '--mode');
+        if (!SUPPORTED_MODES.includes(value as TranslationMode)) {
+          throw new Error(
+            `Unknown value "${value}" for option "--mode". Expected one of: ${SUPPORTED_MODES.join(', ')}.`
+          );
+        }
+        result.mode = value as TranslationMode;
         break;
-      case '--provider':
-        result.provider = tokens.shift();
+      }
+      case '--provider': {
+        const value = readOptionValue(tokens, '--provider');
+        if (!SUPPORTED_PROVIDERS.includes(value as (typeof SUPPORTED_PROVIDERS)[number])) {
+          throw new Error(
+            `Unknown value "${value}" for option "--provider". Expected one of: ${SUPPORTED_PROVIDERS.join(', ')}.`
+          );
+        }
+        result.provider = value;
         break;
+      }
       case '--model':
-        result.model = tokens.shift();
+        result.model = readOptionValue(tokens, '--model');
         break;
       case '--dry-run':
         result.dryRun = true;
@@ -124,11 +144,23 @@ export function parseArgs(argv: string[]): {
         result.help = true;
         break;
       default:
+        if (token.startsWith('-')) {
+          throw new Error(`Unknown option "${token}". Use --help to see supported options.`);
+        }
         throw new Error(`Unknown argument: ${token}`);
     }
   }
 
   return result;
+}
+
+function readOptionValue(tokens: string[], option: string): string {
+  const value = tokens.shift();
+  if (!value || value.startsWith('-')) {
+    throw new Error(`Missing value for option "${option}".`);
+  }
+
+  return value;
 }
 
 function getHelpText(): string {
