@@ -284,7 +284,9 @@ function escapePropertiesValue(
     return escaped;
   }
 
-  return escaped.replace(/[^\u0000-\u007F]/g, (char) =>
-    `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`
-  );
+  return Array.from(escaped, (char) =>
+    char.charCodeAt(0) > 0x7f
+      ? `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`
+      : char
+  ).join('');
 }
