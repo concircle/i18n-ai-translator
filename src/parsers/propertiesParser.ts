@@ -179,6 +179,22 @@ function parseLine(raw: string): PropertiesLine {
     }
 
     if (char === '=' || char === ':') {
+      // Treat repeated separators like `==` as a literal `=` in the key
+      // followed by the actual key/value separator. This supports UI5-style
+      // keys that end with `=`.
+      if (char === '=') {
+        let separatorRunEnd = index;
+        while (separatorRunEnd + 1 < body.length && body[separatorRunEnd + 1] === '=') {
+          separatorRunEnd += 1;
+        }
+
+        if (separatorRunEnd > index) {
+          separatorIndex = separatorRunEnd;
+          separator = char;
+          break;
+        }
+      }
+
       separatorIndex = index;
       separator = char;
       break;
