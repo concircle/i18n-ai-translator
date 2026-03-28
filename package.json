@@ -1,6 +1,6 @@
 {
   "name": "@concircle/i18n-ai-translator",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Translates UI5 i18n.properties files with OpenAI, preserving placeholders and glossary terms.",
   "type": "module",
   "bin": {
