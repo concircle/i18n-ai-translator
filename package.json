@@ -1,7 +1,7 @@
 {
   "name": "@concircle/i18n-ai-translator",
   "version": "0.1.2",
-  "description": "AI-powered i18n translator for UI5 apps. Translates i18n.properties files using OpenAI (extensible for other AI providers).",
+  "description": "Translates UI5 i18n.properties files with OpenAI, preserving placeholders and glossary terms.",
   "type": "module",
   "bin": {
     "i18n-ai-translator": "./bin/i18n-ai-translator.mjs"
